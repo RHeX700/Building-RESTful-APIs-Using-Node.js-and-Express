@@ -1,7 +1,8 @@
 //Import the necessary dependencies
 const http = require('http')
+const fs = require('fs');
 // Define a prot at which the server will run
-const PORT
+const PORT =  5000;
 
 const productsService = require("./productsService");
 const getRequestData = require('./utils');
