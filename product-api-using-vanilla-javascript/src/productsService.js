@@ -12,16 +12,16 @@ const getProductsById = (productId, done) => {
   let product = null
 
   // get a product by ID
-  // if(lodash.findIndex(p => p.id == productId) === -1){
-  //   return done("Requested product doesn't exist..!")
-  // }
-  product = lodash.find(productsList, p => p.id == productId);
-  if(!product){
-    return "Requested product doesn't exist..!";
+  if(!lodash.find(productsList, p => p.id == productId)){
+    return done("Requested product doesn't exist..!")
   }
+  product = lodash.find(productsList, p => p.id == productId);
+  // if(!product){
+  //   return "Requested product doesn't exist..!";
+  // }
 
-  // return done(null, JSON.stringify(product));
-  return JSON.stringify(product)
+  return done(null, JSON.stringify(product));
+  // return JSON.stringify(product)
 }
 
 const saveProduct = (newProduct, done) => {
@@ -29,11 +29,10 @@ const saveProduct = (newProduct, done) => {
   let product = lodash.find(productsList, p => p.id == newProduct.id);
   if(!product){
     productsList.push(newProduct);
-    // return done(null, JSON.stringify(productsList));    
-    return
+    return done(null, JSON.stringify(productsList));
   }
-  // return done("Product already exists..!")
-  return "Product already exists..!"
+  return done("Product already exists..!")
+  // return "Product already exists..!"
 
 }
 
@@ -48,23 +47,22 @@ const updateProduct = (productId, updateData, done) => {
     productsList[productIndex].price = updateData.price;
     productsList[productIndex].quantity = updateData.quantity;
   }else{
-    return "Requested product doesn't exist..!";
+    return done("Requested product doesn't exist..!");
   }
 
-  // done(null, JSON.stringify(productsList));
-  return
+  done(null, JSON.stringify(productsList));
 }
 
 const deleteProduct = (productId, done) => {
   // delete a product    
   let productIndex = lodash.findIndex(productsList, p => p.id == productId);
   if(productIndex == -1){
-    // return done("Requested product doesn't exist..!")
-    return "Requested product doesn't exist..!";
+    return done("Requested product doesn't exist..!")
+    // return "Requested product doesn't exist..!";
   }
   productsList.splice(productIndex, 1)
-  // done(null, JSON.stringify(productsList));
-  return JSON.stringify(productsList);
+  done(null, JSON.stringify(productsList));
+  // return JSON.stringify(productsList);
 }
 
 

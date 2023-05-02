@@ -23,18 +23,33 @@ const server = http.createServer(async (req, res) => {
   else if(req.url.match('\/api\/v1\/products\/([0-9])') && req.method == 'GET'){
     console.log(`GET request received at /api/v1/products/${req.url.split('/')[4]}`);
     let id = parseInt(req.url.split('/')[4]);
-    let product = productsService.getProductsById(id)
-    if(product != "Requested product doesn't exist..!"){
-      res.writeHead(200, {
-        "content-type" : "application/json"
-      })
-      res.end(product);
-    }else{
-      res.writeHead(404, {
-        "content-type" : "application/json"
-      });
-      res.end(product);
-    }
+    productsService.getProductsById(id, (err, result) => {
+      if(err){
+        res.writeHead(404,{
+          "content-type" : "application/json"
+        });
+        res.end(err);
+      }else{
+        res.writeHead(200, {
+          "content-type" : "application/json"
+        });
+
+        res.end(result)
+      }
+
+
+    })
+    // if(product != "Requested product doesn't exist..!"){
+    //   res.writeHead(200, {
+    //     "content-type" : "application/json"
+    //   })
+    //   res.end(product);
+    // }else{
+    //   res.writeHead(404, {
+    //     "content-type" : "application/json"
+    //   });
+    //   res.end(product);
+    // }
   }
 
   // Create a new product
@@ -42,12 +57,24 @@ const server = http.createServer(async (req, res) => {
     console.log('POST request sent to api/v1/products');
     data = await getRequestData(req);
 
-    productsService.saveProduct(JSON.parse(data));
+    productsService.saveProduct(JSON.parse(data), (err, result) => {
 
-    res.writeHead(201, {
-      "content-type" : "application/json"
-    })
-    res.end(JSON.stringify(JSON.parse(data)));
+      if(err){
+        res.writeHead(404,{
+          "content-type" : "application/json"
+        });
+
+        res.end(err);
+      }else{
+        res.writeHead(201, {
+          "content-type" : "application/json"
+        });
+
+        res.end(result)
+      }
+
+
+    });
   }
   // Update a specific product
 
@@ -56,13 +83,24 @@ const server = http.createServer(async (req, res) => {
     data = await getRequestData(req);
     let id = parseInt(req.url.split('/')[4]);
 
-    productsService.updateProduct(id, JSON.parse(data));
+    productsService.updateProduct(id, JSON.parse(data), (err, result) => {
 
-    res.writeHead(200, {
-      "content-type" : "application/json"
+      if(err){
+        res.writeHead(404,{
+          "content-type" : "application/json"
+        });
+
+        res.end(err);
+      }else{
+        res.writeHead(200, {
+          "content-type" : "application/json"
+        });
+
+        res.end(result)
+      }
+
+
     });
-
-    res.end(productsService.getProducts());
   }
 
   // Delete a specific Product
@@ -70,13 +108,24 @@ const server = http.createServer(async (req, res) => {
     console.log('DELETE request sent to api/v1/products');
     let id = parseInt(req.url.split('/')[4]);
 
-    productsService.deleteProduct(id);
+    productsService.deleteProduct(id, (err, result) => {
 
-    res.writeHead(200, {
-      "content-type" : "application/json"
+      if(err){
+        res.writeHead(404,{
+          "content-type" : "application/json"
+        });
+
+        res.end(err);
+      }else{
+        res.writeHead(200, {
+          "content-type" : "application/json"
+        });
+
+        res.end(result)
+      }
+
+
     });
-
-    res.end(productsService.getProducts());
   }
 
 });
