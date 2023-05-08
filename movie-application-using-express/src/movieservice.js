@@ -1,4 +1,4 @@
-
+const axios = require('axios');
 //import axios module
 
 //After starting the JSOn server check the port on which is running accordingly change 
@@ -7,6 +7,11 @@
 //This method will get all movies from json server
 const getMovies = (done) => {
   // This url can be used - axios.get("http://localhost:3000/movies")
+  return axios.get("http://localhost:3000/movies").then(result => {
+    done(null, result);
+  }, err=>{
+    done(err);
+  });
  
 }
 

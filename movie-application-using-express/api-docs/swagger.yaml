@@ -1,0 +1,132 @@
+openapi:  3.0.0
+info: 
+  title: Movie Application
+  description: Documentation for a movie application API developed as an exercise in NIIT's 'Building APIs with Node and express' course on Coursera
+  version:  1.0.0
+  
+servers:
+  - url:  https:localhost:3000/api/v1
+    description:  Localhost hosts the API on port 3000
+    
+paths:
+  /movies:
+    get:
+      summary: Returns a list of movies
+      description: For getting all the movies available on the resource.
+      responses: 
+        '200':
+          description: A JSON array of movie objects
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+
+    post:
+      summary: Create a new movie object
+      description: Creates a new movie object and store it in the database.
+      responses: 
+        '201':
+          description: A JSON object representing the movie created
+          content: 
+            application/json:
+              schema: 
+                type: object
+                
+              
+    
+  /movies/{movieId}:
+    get:
+      summary: Returns a particular movie object given the the id
+      description: For getting a particular movie object given the id
+      responses: 
+        '200':
+          description: A JSON object representing a movie
+          content: 
+            application/json:
+              schema: 
+                type: object
+
+        '404':
+          description: Object with id does not exist
+          content: 
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          description: Something went wrong, try again later
+          content: 
+            application/json:
+              schema: 
+                type: string
+                
+              
+                
+      parameters: 
+        - name: movieId
+          in: path
+          required: true
+          description: Id of movie being queries in the database
+          schema: 
+            type: integer
+            format: int64
+            minimum: 1
+            
+    patch:
+      summary: Updates the details of a movie
+      description: Sending a request to this endpoint updates the movie with the given id
+      
+      
+      responses: 
+        '200':
+          description: Return a JSON list of all movie objects in the database after update process has been carried out
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  
+        '404':
+          description: This response is returned when the queried object cannot be found.
+          content: 
+            application/json:
+              schema: 
+                type: string
+                
+        '400':
+          description: This is returned when something went wrong internally.
+          content: 
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Removes a movie object from the database
+      description: Sending a delete request to this endpoint deletes the movie with the given ID
+      responses: 
+        '200':
+          description: Return a JSON list of all movie objects in the database after update process has been carried out
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  
+        '404':
+          description: This response is returned when the queried object cannot be found.
+          content: 
+            application/json:
+              schema: 
+                type: string
+                
+        '400':
+          description: This is returned when something went wrong internally.
+          content: 
+            application/json:
+              schema:
+                type: string
+      
+      
