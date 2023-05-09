@@ -1,5 +1,7 @@
-
+const movieController = require('./moviecontroller');
 //import all the modules required 
+const express = require('express');
+const router = express.Router();
 
 /**
  * API to get the details of all movies
@@ -10,9 +12,13 @@ router.get("/", (req, res) => {
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.getMovies((err, results) => {
+      if(err){
+        return  res.status(404).send(err);
+      }
+      return  res.status(200).send(results.data);
     })
   } catch (err) {
-   
+   return res.status(400).send("Something went wrong, please try again later");
   }
 });
 /**
@@ -23,16 +29,19 @@ router.get("/", (req, res) => {
 router.get("/:movieId", (req, res) => {
   try {
     //retreive moviedId from req.params
-  
+    let movieId = req.params.movieId;
 
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.getMovieById(movieId, (err, results) => {
-     
+     if(err){
+      return  res.status(404).send(err);
+     }
+     return res.status(200).send(results.data);
     });
 
   } catch (err) {
-    
+    return res.status(400).send("Something went wrong, try again later");
   }
 });
 
@@ -44,16 +53,22 @@ router.post("/", (req, res) => {
   try {
     //retreive movieDetails from req.body
     const movieDetails = {
-      
-    }
+      "id": req.body.id,
+      "movieName": req.body.movieName,
+      "director": req.body.director,
+      "rating": req.body.rating
+    };
      //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.saveMovieDetails(movieDetails, (err, results) => {
-     
+     if(err){
+      return res.status(400).send(err);
+     }
+     return res.status(200).send(results.data);
     });
 
   } catch (err) {
-   
+    return res.status(400).send("Something went wrong try again later");
   }
 });
 
@@ -64,19 +79,32 @@ router.post("/", (req, res) => {
 router.patch("/:movieId", (req, res) => {
   try {
      //retreive moviedId from req.params
-    
+    let movieId = req.params.movieId;
     //retreive movieDetails from req.body
     const movieDetails = {
      
+    };
+    if(req.body.movieName){
+      movieDetails.movieName = req.body.movieName;
     }
+    if(req.body.director){
+      movieDetails.director = req.body.director;
+    }
+    if(req.body.rating){
+      movieDetails.rating = req.body.rating;
+    }    
     //calling controller method and passing the parameters 
     //return the response as per error or result coming from controller
     movieController.updateMovieDetails(movieId, movieDetails, (err, results) => {
-    
+    if(err){
+      return res.status(400).send(err);
+    }
+
+    return  res.status(200).send(results.data)
     });
 
   } catch (err) {
-   
+    return res.status(400).send("Something went wrong, try again later")
   }
 });
 
@@ -87,15 +115,20 @@ router.patch("/:movieId", (req, res) => {
 router.delete("/:movieId", (req, res) => {
   try {
      //retreive moviedId from req.params
+     let movieId = req.params.movieId
    
        //calling controller method and passing the parameters 
       //return the response as per error or result coming from controller
-    movieController.deleteMovieById(movieId, (err, results) => {
+      movieController.deleteMovieById(movieId, (err, results) => {
+      if(err){
+        res.status(400).send(err);
+      }
+      res.status(200).send(results.data);
     })
      
 
   } catch (err) {
-
+    res.status(400).send('Something went wrong, try again later');
   }
 });
 
