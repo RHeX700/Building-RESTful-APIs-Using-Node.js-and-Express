@@ -1,4 +1,4 @@
-const users = require('./users.json');
+const users = require('../users.json');
 
 const fs = require('fs');
 
@@ -9,7 +9,7 @@ const findUser = (email, done) => {
 
 const registerUser = (userData, done) => {
     users.push(userData);
-    fs.writeFileSync('./users.json', JSON.stringify(users));
+    fs.writeFileSync('../users.json', JSON.stringify(users));
     done(undefined, userData);
 }
 
