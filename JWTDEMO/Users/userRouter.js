@@ -6,14 +6,14 @@ const userController = require('./userController');
 router.get('/', (req, res) => {
     try {
         let userData = req.claims
-        console.log(claims);
+        console.log(userData);
         if(!userData.email){
             return res.status(400).send('User email not available');
         }
 
-        userController.findUser(email, (err, result) =>{
+        userController.findUser(userData.email, (err, result) =>{
             if (err) {
-                return res.status(400).send("Erroe while getting user");
+                return res.status(400).send("Error while getting user");
             }
             return res.status(200).send(result);
         });
