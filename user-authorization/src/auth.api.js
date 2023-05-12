@@ -4,17 +4,23 @@ const router = express.Router();
 const oauthCtrl = require("./auth.controller");
 
 // redirects the login to consent authorization screen from github
+
 router.get('/login', (req, res) => {
- 
-});
-
-
-// Callback url to which github oauth code is sent 
+        res.redirect(`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}`);
+    });
+    
 router.get('/callback', (req, res) => {
- 
-        // Return the token in cookie
-        // Data should be sent either in cookie or in session storage
-       
-});
+try {
 
+        oauthCtrl.oauthProcessor(req.query.code, (err, data) => {
+        if(err){
+                res.status(401).send({err : "Bad request"})
+        }
+        return res.redirect(`/welcome.html?token=${data}`);
+        });
+} catch (error) {
+        
+}
+});
+    
 module.exports = router;
